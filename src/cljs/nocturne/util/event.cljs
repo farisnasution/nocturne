@@ -26,6 +26,6 @@
   [event]
   (.preventDefault event))
 
-(defn anchor->path
+(defn event->path
   [event]
   (-> event .-currentTarget .-pathname))
