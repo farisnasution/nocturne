@@ -11,7 +11,7 @@
           (map? headers) (assoc :headers headers)))
 
 (defn get-request
-  [url [{:keys [params headers]}] & [channel]]
+  [url {:keys [params headers]} & [channel]]
   (let [ch (if (nil? channel)
              (chan)
              channel)
@@ -21,7 +21,7 @@
       ch)))
 
 (defn post-request
-  [url [{:keys [params headers]}] & [channel]]
+  [url {:keys [params headers]} & [channel]]
   (let [ch (if (nil? channel)
              (chan)
              channel)
@@ -31,7 +31,7 @@
       ch)))
 
 (defn put-request
-  [url [{:keys [params headers]}] & [channel]]
+  [url {:keys [params headers]} & [channel]]
   (let [ch (if (nil? channel)
              (chan)
              channel)
@@ -41,7 +41,7 @@
       ch)))
 
 (defn delete-request
-  [url [{:keys [params headers]}] & [channel]]
+  [url {:keys [params headers]} & [channel]]
   (let [ch (if (nil? channel)
              (chan)
              channel)
