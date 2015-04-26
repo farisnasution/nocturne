@@ -1,23 +1,31 @@
 (ns cljs.nocturne.app.user.io
   (:require [cljs.nocturne.util.io :as ui]))
 
+(defn fetch-user-by-token
+  [token & [channel]]
+  (let [url "/api/v1/user"]
+    (ui/get-request url {:token token} channel)))
+
 (defn fetch-user
-  [{:keys [slug params headers]}]
+  [{:keys [slug params headers]} & [channel]]
   (let [url (str "/api/v1/user" (when slug
                                   (str "/" slug)))]
-    (ui/get-request url params headers)))
+    (ui/get-request url {:params params
+                         :headers headers} channel)))
 
 (defn save-user
-  [params {:keys [headers]}]
+  [params {:keys [headers]} & [channel]]
   (let [url "/api/v1/user"]
-    (ui/post-request url params headers)))
+    (ui/post-request url {:params params
+                          :headers headers} channel)))
 
 (defn update-user
-  [slug params {:keys [headers]}]
+  [slug params {:keys [headers]} & [channel]]
   (let [url (str "/api/v1/user/" slug)]
-    (ui/put-request url params headers)))
+    (ui/put-request url {:params params
+                         :headers headers} channel)))
 
 (defn remove-user
-  [slug {:keys [headers]}]
+  [slug {:keys [headers]} & [channel]]
   (let [url (str "/api/v1/user/" slug)]
-    (ui/delete-request url params headers)))
+    (ui/delete-request url {:headers headers} channel)))

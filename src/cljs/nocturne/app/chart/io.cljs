@@ -2,25 +2,28 @@
   (:require [cljs.nocturne.util.io :as ui]))
 
 (defn fetch-chart
-  [user-slug {:keys [slug params headers]}]
+  [user-slug {:keys [slug params headers]} & [channel]]
   (let [url (str "/api/v1/user/"
                  user-slug
                  "/chart"
                  (when slug
                    (str "/" slug)))]
-    (ui/get-request url params headers)))
+    (ui/get-request url {:params params
+                         :headers headers} channel)))
 
 (defn save-chart
-  [user-slug params {:keys [headers]}]
+  [user-slug params {:keys [headers]} & [channel]]
   (let [url (str "/api/v1/user/" user-slug "/chart")]
-    (ui/post-request url params headers)))
+    (ui/post-request url {:params params
+                          :headers headers} channel)))
 
 (defn update-chart
-  [user-slug slug params {:keys [headers]}]
+  [user-slug slug params {:keys [headers]} & [channel]]
   (let [url (str "/api/v1/user/" user-slug "/chart/" slug)]
-    (ui/put-request url params headers)))
+    (ui/put-request url {:params params
+                         :headers headers} channel)))
 
 (defn remove-chart
-  [user-slug slug {:keys [headers]}]
+  [user-slug slug {:keys [headers]} & [channel]]
   (let [url (str "/api/v1/user/" user-slug "/chart/" slug)]
-    (ui/delete-request url params headers)))
+    (ui/delete-request url {:headers headers} channel)))
