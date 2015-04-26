@@ -22,7 +22,7 @@
                (false? description-error))
       (let [data-name (om/get-state owner [:data-name :value])
             url (om/get-state owner [:url :value])
-            description] (om/get-state owner [:description :value])
+            description (om/get-state owner [:description :value])]
         (put! ch [:form :request [data-name url description]])))))
 
 (defn make-request
@@ -52,7 +52,6 @@
                                        :error? error)))))
 
 (defcomponent submit-data-form
-  "TODO: val-fns for each field"
   [data owner {:keys [submit-url]}]
   (display-name [_] "submit-data-form")
   (init-state [_]
@@ -98,7 +97,8 @@
                   (om/build validated-field
                             {}
                             {:opts {:parent-ch ch
-                                    :val-fns
+                                    :val-fns [[#(not (empty? %))
+                                               "Name cannot empty."]]
                                     :id :data-name
                                     :title "Name"
                                     :view input-field
@@ -106,7 +106,8 @@
                   (om/build validated-field
                             {}
                             {:opts {:parent-ch ch
-                                    :val-fns
+                                    :val-fns [[#(not (empty? %))
+                                               "Url cannot empty."]]
                                     :id :url
                                     :title "Url"
                                     :view input-field
@@ -114,7 +115,8 @@
                   (om/build validated-field
                             {}
                             {:opts {:parent-ch ch
-                                    :val-fns
+                                    :val-fns [[#(not (empty? %))
+                                               "Description cannot empty."]]
                                     :id :description
                                     :title "Description"
                                     :view textarea-field}})]

@@ -37,7 +37,8 @@ r
 
 (defcomponent editable-dd
   "TODO: val-fns"
-  [data owner {:keys [id]}]
+  [data owner {:keys [id
+                      error-title]}]
   (display-name [_] "editable-dd")
   (init-state [_]
               (let [ch (chan)]
@@ -72,7 +73,8 @@ r
                   (om/build validated-field
                             {:content (id data)}
                             {:opts {:parent-ch ch
-                                    :val-fns
+                                    :val-fns [[#(not (empty? %))
+                                               (str error-title " cannot empty.")]]
                                     :id id
                                     :view  input-field
                                     :view-opts {:field-type "text"}}})
