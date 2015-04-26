@@ -34,6 +34,7 @@
       (put! ch [:form :response v]))))
 
 (defn handle-response
+  "TODO: shud not be doing io here, instead do transact! and then abuse :tx-listen"
   [owner [response-type response]]
   (if (= response-type :ok)
     (let [next-path (show-single-data {:user-slug (:creator-slug response)
