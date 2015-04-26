@@ -7,20 +7,24 @@
                [cljs.core.async.macros :only [go-loop]]))
 
 (defcomponent input-field
-  [{:keys [value]} owner {:keys [parent-ch
-                                 id
-                                 placeholder
-                                 field-type]}]
+  [data owner {:keys [parent-ch
+                      id
+                      placeholder
+                      field-type]}]
   (display-name [_] "input-field")
   (init-state [_]
               (let [ch (chan)]
                 {:ch ch
-                 :callback-fn #(put! ch %)}))
+                 :callback-fn #(put! ch %)
+                 :value nil
+                 :event nil}))
   (will-mount [_]
               (let [ch (om/get-state owner :ch)]
                 (go-loop []
-                  (let [event (<! ch)]
-                    (put! parent-ch event))
+                  (let [event (<! ch)
+                        value (ue/event->value event)]
+                    (om/update-state! owner #(assoc % :value value
+                                                      :event event)))
                   (recur))))
   (did-mount [_]
              (let [callback-fn (om/get-state owner :callback-fn)
@@ -32,10 +36,17 @@
                       node (om/get-node owner)]
                   (ue/unlisten node (:BLUR ue/event-type) callback-fn)
                   (ue/unlisten node (:KEYUP ue/event-type) callback-fn)))
-  (render [_]
-          [:input {:style {:border-radius 0}
-                   :id id
-                   :type field-type
-                   :placeholder placeholder
-                   :class "form-control"
-                   :value value}]))
+  (did-update [_ prev-props prev-state]
+              (let [current-event (om/get-state owner :event)]
+                (when (and (not (nil? current-event))
+                           (not (nil? parent-ch)))
+                  (put! parent-ch current-event))))
+  (render-state [_ {:keys [value]}]
+                [:input {:style {:border-radius 0}
+                         :id id
+                         :type field-type
+                         :placeholder placeholder
+                         :class "form-control"
+                         :value value
+                         :onChange (fn [e]
+                                     )}]))
