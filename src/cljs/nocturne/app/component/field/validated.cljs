@@ -35,12 +35,12 @@
                                              :event event)))))
 
 (defcomponent validated-field
-  [{:keys [value]} owner {:keys [parent-ch
-                                 val-fns
-                                 id
-                                 title
-                                 view
-                                 view-opts]}]
+  [data owner {:keys [parent-ch
+                      val-fns
+                      id
+                      title
+                      view
+                      view-opts]}]
   (display-name [_] "validated-field")
   (init-state [_]
               {:ch (chan)
@@ -55,29 +55,24 @@
                     validation-fn (om/get-state owner :validation-fn)]
                 (go-loop []
                   (let [event (<! ch)
-                        message (validation-fn (ue/event->value event))]
+                        value (ue/event->value event)
+                        message (validation-fn value)]
                     (update-error-status owner message value event))
                   (recur))))
   (did-update [_ prev-props prev-state]
-              (let [;prev-error (:error? prev-state)
-                    current-error (om/get-state owner :error?)
+              (let [current-error (om/get-state owner :error?)
                     current-value (om/get-state owner :value)
                     current-event (om/get-state owner :event)]
                 (put! parent-ch [id
                                  current-error
-                                 [current-value current-event]])
-                ;; (when-not (= prev-error current-error)
-                ;;   (put! parent-ch [id
-                ;;                    current-error
-                ;;                    [current-value current-event]]))
-                ))
+                                 [current-value current-event]])))
   (render-state [_ {:keys [ch error? first? message]}]
-                [:div {:class (str "form-group" (error-class error? first?))}
+                [:div {:class (error-class error? first?)}
                  (when title
                    [:label {:for (str id)}
                     title])
                  (om/build view
-                           {:value value}
+                           {}
                            {:opts (merge {:parent-ch ch
                                           :id (str id)}
                                          view-opts)})
