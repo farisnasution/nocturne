@@ -15,7 +15,7 @@
   (render [_]
           [:dt {}
            content]))
-
+r
 (defcomponent dd
   [{:keys [content]} owner]
   (display-name [_] "dd")
@@ -25,10 +25,15 @@
 
 (defn handle-attempt-to-edit
   [data id owner error value event]
-  (when (and (nil? error)
-             (= 13 (.-keyCode event)))
-    (om/update! data id value)
-    (om/set-state! owner :editing? false)))
+  (condp
+      (and (nil? error)
+           (= (:ENTER ue/keycodes)
+              (ue/keycode event))) (do
+                                     (om/update! data id value)
+                                     (om/set-state! owner :editing? false))
+    (= (:ESC ue/keycodes) (ue/keycode event)) (om/set-state! owner
+                                                             :editing?
+                                                             false)))
 
 (defcomponent editable-dd
   "TODO: val-fns"
@@ -45,14 +50,14 @@
                   (let [[from meta-info value] (<! ch)]
                     (condp = from
                       :self (om/set-state! owner :editing? true)
-                      :data-name (let [error meta-info
-                                       [real-value event] value]
-                                   (handle-attempt-to-edit data
-                                                           id
-                                                           owner
-                                                           error
-                                                           real-value
-                                                           event))))
+                      :name (let [error meta-info
+                                  [real-value event] value]
+                              (handle-attempt-to-edit data
+                                                      id
+                                                      owner
+                                                      error
+                                                      real-value
+                                                      event))))
                   (recur))))
   (did-mount [_]
              (let [callback-fn (om/get-state owner :callback-fn)
