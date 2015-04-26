@@ -26,6 +26,10 @@
   ([container events callback-fn opt-capt opt-handler]
    (ev/unlisten container events callback-fn opt-capt opt-handler)))
 
+(defn keycode
+  [event]
+  (.-keyCode event))
+
 (defn prevent-default
   [event]
   (.preventDefault event))
