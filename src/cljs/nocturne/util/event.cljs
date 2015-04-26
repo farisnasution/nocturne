@@ -1,12 +1,13 @@
 (ns cljs.nocturne.util.event
   (:require [goog.events :as ev])
-  (:use [clojure.walk :only [keywordize-keys]]))
+  (:use [clojure.walk :only [keywordize-keys]])
+  (:import [goog.events KeyCodes EventType]))
 
-(def event-type (-> ev/EventType
+(def event-type (-> EventType
                     js->clj
                     keywordize-keys))
 
-(def keycodes (-> ev/KeyCodes
+(def keycodes (-> KeyCodes
                   js->clj
                   keywordize-keys))
 
