@@ -1,10 +1,14 @@
-(ns cljs.nocturne.util.events
+(ns cljs.nocturne.util.event
   (:require [goog.events :as ev])
   (:use [clojure.walk :only [keywordize-keys]]))
 
 (def event-type (-> ev/EventType
                     js->clj
                     keywordize-keys))
+
+(def keycodes (-> ev/KeyCodes
+                  js->clj
+                  keywordize-keys))
 
 (defn listen
   ([container events callback-fn]
@@ -29,3 +33,7 @@
 (defn event->path
   [event]
   (-> event .-currentTarget .-pathname))
+
+(defn event->value
+  [event]
+  (-> event .-currentTarget .-value))
