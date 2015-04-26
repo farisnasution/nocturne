@@ -1,5 +1,5 @@
 (ns cljs.nocturne.util.state
-  (:require [cljs.nocturune.state :as state]))
+  (:require [cljs.nocturne.state :as state]))
 
 (defn get-history
   []
