@@ -3,6 +3,7 @@
             [sablono.core :as html :refer-macros [html]]
             [cljs.nocturne.util.event :as ue]
             [cljs.core.async :as async :refer [<! put! chan]])
+  (:use [cljs.nocturne.util.generic :only [not-nil?]])
   (:use-macros [cljs.nocturne.macro :only [defcomponent]]
                [cljs.core.async.macros :only [go-loop]]))
 
@@ -12,7 +13,7 @@
     (->> rules
          (map (fn [[rule message]]
                 (when-not (rule value) message)))
-         (filter #(not (nil? %)))
+         (filter #(not-nil? %))
          first)))
 
 (defn error-class
@@ -26,7 +27,7 @@
   [owner message value event]
   (om/update-state! owner (fn [current]
                             (let [first? (:first? current)]
-                              (assoc current :error? (not (nil? message))
+                              (assoc current :error? (not-nil? message)
                                              :first? (if (true? first?)
                                                        false
                                                        first?)
