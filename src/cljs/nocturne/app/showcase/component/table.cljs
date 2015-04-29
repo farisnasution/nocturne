@@ -10,7 +10,7 @@
                [cljs.core.async.macros :only [go-loop]]))
 
 (defn update-order
-  [o]
+  [order]
   (cond
    (nil? order) :ascending
    (= order :ascending) :descending
