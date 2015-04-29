@@ -4,15 +4,15 @@
   (:use-macros [cljs.nocturne.macro :only [defcomponent]]))
 
 (defcomponent button
-  [{:keys [content disabled]} owner {:keys [btn-type id]}]
+  [{:keys [content]} owner {:keys [classes id]}]
   (display-name [_] "button")
-  (render [_]
-          [:button {:style {:border-radius 0}
-                    :class (str "btn"
-                                (when btn-type
-                                  (str " btn-" btn-type)))
-                    :type "submit"
-                    :disabled (when-not (nil? disabled)
-                                (boolean disabled))
-                    :id id}
-           content]))
+  (init-state [_]
+              {:disabled? false})
+  (render-state [_ {:keys [disabled?]}]
+                [:button {:style {:border-radius 0}
+                          :class (str "btn "
+                                      classes)
+                          :type "submit"
+                          :disabled disabled?
+                          :id id}
+                 content]))
