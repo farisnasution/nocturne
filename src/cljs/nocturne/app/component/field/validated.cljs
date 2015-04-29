@@ -17,10 +17,10 @@
 
 (defn error-class
   [error? first?]
-  (str "form-group"
-       (cond
-        (and error? (not first?)) " has-error"
-        (and (not error?) (not first?)) " has-success")))
+  (cond
+   (and error? (not first?)) " has-error"
+   (and (not error?) (not first?)) " has-success"
+   :else ""))
 
 (defn update-error-status
   [owner message value event]
@@ -40,6 +40,7 @@
                       id
                       title
                       view
+                      view-size-class
                       view-opts]}]
   (display-name [_] "validated-field")
   (init-state [_]
@@ -66,16 +67,21 @@
                 (put! parent-ch [id
                                  current-error
                                  [current-value current-event]])))
-  (render-state [_ {:keys [ch error? first? message]}]
-                [:div {:class (error-class error? first?)}
+  (render-state [_ {:keys [ch error? first? message value]}]
+                [:div {:class (str "form-group"
+                                   (error-class error? first?))}
                  (when title
                    [:label {:for (str id)}
                     title])
-                 (om/build view
-                           {}
-                           {:opts (merge {:parent-ch ch
-                                          :id (str id)}
-                                         view-opts)})
+                 [:div (if (string? view-size-class)
+                         {:class view-size-class}
+                         {})
+                  (om/build view
+                            {}
+                            {:opts (merge {:parent-ch ch
+                                           :id (str id)}
+                                          view-opts)
+                             :state {:value value}})]
                  (when (= (error-class error? first?) " has-error")
                    [:div {:class "help-block with-errors"}
                     [:ul {:class "list-unstyled"}
