@@ -9,17 +9,22 @@
 (defcomponent textarea-field
   [data owner {:keys [parent-ch
                       placeholder
-                      field-id]}]
+                      id]}]
   (display-name [_] "textarea-field")
   (init-state [_]
               (let [ch (chan)]
                 {:ch ch
-                 :callback-fn #(put! ch %)}))
+                 :callback-fn #(put! ch %)
+                 :value nil
+                 :event nil}))
   (will-mount [_]
               (let [ch (om/get-state owner :ch)]
                 (go-loop []
-                  (let [event (<! ch)]
-                    (put! parent-ch (ue/event->value event)))
+                  (let [event (<! ch)
+                        value (ue/event->value event)]
+                    (om/update-state! owner (fn [current]
+                                              (assoc current :value value
+                                                             :event event))))
                   (recur))))
   (did-mount [_]
              (let [callback-fn (om/get-state owner :callback-fn)
@@ -31,8 +36,16 @@
                       node (om/get-node owner)]
                   (ue/unlisten node (:BLUR ue/event-type) callback-fn)
                   (ue/unlisten node (:KEYUP ue/event-type) callback-fn)))
-  (render [_]
-          [:textarea {:style {:border-radius 0}
-                      :id field-id
-                      :placeholder placeholder
-                      :class "form-control"}]))
+  (did-update [_ prev-props prev-state]
+              (let [current-event (om/get-state owner :event)]
+                (when (and (not (nil? current-event))
+                           (not (nil? parent-ch)))
+                  (put! parent-ch current-event))))
+  (render-state [_ {:keys [value]}]
+                [:textarea {:style {:border-radius 0}
+                            :id id
+                            :value value
+                            :placeholder placeholder
+                            :class "form-control"
+                            :onChange (fn [e]
+                                        )}]))
