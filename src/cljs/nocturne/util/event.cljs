@@ -42,3 +42,7 @@
 (defn event->value
   [event]
   (-> event .-currentTarget .-value))
+
+(defn event->id
+  [event]
+  (-> event .-currentTarget .-id))
