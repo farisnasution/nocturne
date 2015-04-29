@@ -23,8 +23,9 @@
                 (go-loop []
                   (let [event (<! ch)
                         value (ue/event->value event)]
-                    (om/update-state! owner #(assoc % :value value
-                                                      :event event)))
+                    (om/update-state! owner (fn [current]
+                                              (assoc current :value value
+                                                             :event event))))
                   (recur))))
   (did-mount [_]
              (let [callback-fn (om/get-state owner :callback-fn)
