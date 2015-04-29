@@ -66,8 +66,7 @@
                                                                     :error? error?))))
                       button-ch (let [error? (om/get-state owner :error?)
                                       text-value (om/get-state owner :value)]
-                                  (when-not error?
-                                    (put! parent-ch [:field [v text-value]])))))
+                                  (put! parent-ch [:field [error? v text-value]]))))
                   (recur))))
   (did-mount [_]
              (let [callback-fn (om/get-state owner :callback-fn)
@@ -110,13 +109,14 @@
   [data ks owner from value]
   (condp = from
     :content (om/set-state! owner :editing? true)
-    :field (let [[event text-value] value
+    :field (let [[error? event text-value] value
                  which-button (ue/event->id event)]
              (condp = which-button
                "cancel-button" (om/set-state! owner :editing? false)
                "submit-button" (do
                                  (om/set-state! owner :editing? false)
-                                 (om/update! data ks text-value))))))
+                                 (when-not error?
+                                   (om/update! data ks text-value)))))))
 
 (defcomponent editable-dd
   [data owner {:keys [ks
