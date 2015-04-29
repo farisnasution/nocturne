@@ -3,6 +3,9 @@
             [sablono.core :as html :refer-macros [html]]
             [cljs.nocturne.util.event :as ue]
             [cljs.nocturne.util.query :as uq]
+            [cljs.nocturne.util.io :as ui]
+            [cljs.nocturne.util.state :as us]
+            [cljs.nocturne.util.history :as uh]
             [cljs.core.async :as async :refer [<! put! chan]])
   (:use [cljs.nocturne.app.component.field.input :only [input-field]]
         [cljs.nocturne.app.component.field.textarea :only [textarea-field]]
@@ -10,7 +13,7 @@
         [cljs.nocturne.app.component.button :only [button]]
         [cljs.nocturne.app.data.route :only [show-single-data]])
   (:use-macros [cljs.nocturne.macro :only [defcomponent]]
-               [cljs.core.async.macros :only [go-loop]]))
+               [cljs.core.async.macros :only [go-loop go]]))
 
 (defn handle-form-submission
   [owner ch _]
@@ -122,12 +125,12 @@
                                     :view textarea-field}})]
                  [:footer {}
                   (om/build button
-                            {:content "Submit"
-                             :disabled (or (:error?  data-name)
-                                           (:error? url)
-                                           (:error? description))}
-                            {:opts {:btn-type "primary"
-                                    :id "submit-button"}})
+                            {:content "Submit"}
+                            {:opts {:classes "btn-primary"
+                                    :id "submit-button"}
+                             :state {:disabled? (or (:error?  data-name)
+                                                    (:error? url)
+                                                    (:error? description))}})
                   (when-not (nil? form-message)
                     [:div {}
                      [:ul {:class "list-unstyled"}

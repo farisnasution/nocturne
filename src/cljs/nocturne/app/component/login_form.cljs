@@ -111,11 +111,11 @@
                              :react-key "password-field"})]
                  [:footer {}
                   (om/build button
-                            {:content "Login"
-                             :disabled (or (:error? username)
-                                           (:error? password))}
-                            {:opts {:btn-type "primary"
-                                    :id "login-button"}})
+                            {:content "Login"}
+                            {:opts {:classes "btn-primary"
+                                    :id "login-button"}
+                             :state {:disabled? (or (:error? username)
+                                                    (:error? password))}})
                   (when-not (nil? form-message)
                     [:div {}
                      [:ul {:class "list-unstyled"}

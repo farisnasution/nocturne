@@ -39,4 +39,4 @@
   (render [_]
           (om/build button
                     {:content "Preview"}
-                    {:opts {:btn-type "primary"}})))
+                    {:opts {:classes "btn-primary"}})))
