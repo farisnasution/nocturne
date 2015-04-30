@@ -8,3 +8,8 @@ pom.xml.asc
 /.lein-*
 /.nrepl-port
 *.js.map
+figwheel_server.log
+resources/public/*
+!resources/public/js/vendor/*
+!resources/public/css/vendor/*
+!resources/public/css/fonts/*
