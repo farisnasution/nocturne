@@ -4,39 +4,39 @@
   (:use-macros [cljs.nocturne.macro :only [defcomponent]]))
 
 (defcomponent rect
-  [config owner]
+  [data owner]
   (display-name [_] "rect")
   (render [_]
-          [:rect (select-keys config
+          [:rect (select-keys data
                               [:fill :width :height :stroke
                                :stroke-width :x :y :rx :ry :transform])]))
 
 (defcomponent text
-  [config owner]
+  [data owner]
   (display-name [_] "text")
   (render [_]
-          [:text (select-keys config
+          [:text (select-keys data
                               [:x :y :dx :dy
                                :text-anchor :transform])
-           (:content config)]))
+           (:content data)]))
 
 (defcomponent line
-  [config owner]
+  [data owner]
   (display-name [_] "line")
   (render [_]
-          [:line (select-keys config
+          [:line (select-keys data
                               [:x1 :y1 :x2 :y2
                                :stroke :stroke-width :transform])]))
 
 (defcomponent path
-  [config owner]
+  [data owner]
   (display-name [_] "path")
   (render [_]
-          [:path (select-keys config
+          [:path (select-keys data
                               [:d :stroke :stroke-width :fill :transform])]))
 
 (defcomponent circle
-  [config owner]
+  [data owner]
   (display-name [_] "circle")
   (render [_]
-          [:circle (select-keys config [:cx :cy :r :fill :transform])]))
+          [:circle (select-keys data [:cx :cy :r :fill :transform])]))
