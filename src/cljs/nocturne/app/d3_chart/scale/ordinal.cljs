@@ -55,18 +55,18 @@
           (not-nil? range-round-bands) (-invoke-range-round-bands
                                         range-round-bands)))
 
-(defn ordinal-10
+(defn category-10
   []
   (.category10 (.-scale js/d3)))
 
-(defn ordinal-20
+(defn category-20
   []
   (.category20 (.-scale js/d3)))
 
-(defn ordinal-20b
+(defn category-20b
   []
   (.category20b (.-scale js/d3)))
 
-(defn ordinal-20c
+(defn category-20c
   []
   (.category20c (.-scale js/d3)))
