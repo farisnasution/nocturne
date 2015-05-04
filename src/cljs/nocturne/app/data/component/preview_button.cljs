@@ -15,17 +15,18 @@
       (put! parent-ch result))))
 
 (defcomponent preview-button
-  [data owner {:keys [parent-ch
-                      preview-url]}]
+  [data owner {:keys [parent-ch]}]
   (display-name [_] "preview-button")
   (init-state [_]
               (let [ch (chan)]
-                {:ch ch
+                {:preview-url nil
+                 :ch ch
                  :callback-fn #(put! ch %)}))
   (will-mount [_]
               (let [ch (om/get-state owner :ch)]
                 (go-loop []
-                  (let [event (<! ch)]
+                  (let [event (<! ch)
+                        preview-url (om/get-state owner :preview-url)]
                     (fetch-preview event preview-url parent-ch))
                   (recur))))
   (did-mount [_]
