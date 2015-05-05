@@ -43,7 +43,12 @@
                           next
                           reverse
                           (map #(* -1 %))))
-        new-data (concat lower-data upper-data)]
+        new-data (concat (when-not (= (first lower-data) min-data)
+                           min-data)
+                         lower-data
+                         upper-data
+                         (when-not (= (last upper-data) max-data)
+                           max-data))]
     new-data))
 
 (defcomponent numerical-ticks
