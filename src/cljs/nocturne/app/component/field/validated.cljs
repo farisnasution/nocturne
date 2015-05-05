@@ -26,7 +26,7 @@
   [owner messages value event]
   (om/update-state! owner (fn [current]
                             (let [first? (:first? current)]
-                              (assoc current :error? (not-nil? message)
+                              (assoc current :error? (not (empty? messages))
                                              :first? (if (true? first?)
                                                        false
                                                        first?)
@@ -46,9 +46,9 @@
   (init-state [_]
               {:ch (chan)
                :validation-fn (rules-fn val-fns)
-               :error? true
+               :error {:state true
+                       :messages nil}
                :first? true
-               :messages nil
                :value nil
                :event nil})
   (will-mount [_]
@@ -61,15 +61,15 @@
                     (update-error-status owner messages value event))
                   (recur))))
   (did-update [_ prev-props prev-state]
-              (let [current-error (om/get-state owner :error?)
+              (let [current-error (om/get-state owner [:error :state])
                     current-value (om/get-state owner :value)
                     current-event (om/get-state owner :event)]
                 (put! parent-ch [id
                                  current-error
                                  [current-value current-event]])))
-  (render-state [_ {:keys [ch error? first? messages value]}]
+  (render-state [_ {:keys [ch error first? value]}]
                 [:div {:class (str "form-group"
-                                   (error-class error? first?))}
+                                   (error-class (:state error) first?))}
                  (when title
                    [:label {:for (str id)}
                     title])
@@ -82,9 +82,10 @@
                                            :id (str id)}
                                           view-opts)
                              :state {:value value}})]
-                 (when (= (error-class error? first?) " has-error")
+                 (when (= (error-class (:state error) first?) " has-error")
                    [:div {:class "help-block with-errors"}
                     [:ul {:class "list-unstyled"}
                      (mapv (fn [message]
                              [:li {}
-                              message]) messages)]])]))
+                              message])
+                           (:messages error))]])]))
