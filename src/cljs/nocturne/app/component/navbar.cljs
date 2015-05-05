@@ -26,7 +26,7 @@
   [value suggestions-ch _]
   (go
     (<! (timeout 500))
-    (let [result-ch (aui/fetch-user {:params value})
+    (let [result-ch (aui/request-get-user {:params value})
           result (<! result-ch)]
       (put! suggestions-ch result))))
 
