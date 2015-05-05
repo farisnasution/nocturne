@@ -77,7 +77,7 @@
                                                    y-min
                                                    y-max
                                                    inner-size)
-                path-constructor (construct-path-opts-line opts y-ks)]
+                path-constructor (construct-path-opts-line line-opts y-ks)]
             [:svg {:width (:width size)
                    :height (:height size)}
              (om/build-all line
@@ -91,16 +91,18 @@
                                         y-data)
                            {:key :react-key})
              (om/build adaca/numerical-axis
-                       {:size {:inner-size inner-size
+                       {:size {:size size
                                :margin margin}
                         :scale-fn x-scale
                         :opts  (:opts x-axis-opts)
                         :orient (:orient x-axis-opts :bottom)
-                        :data [x-min x-max]})
+                        :data [x-min x-max]}
+                       {:react-key "x-axis"})
              (om/build adaca/numerical-axis
-                       {:size {:inner-size inner-size
+                       {:size {:size size
                                :margin margin}
                         :scale-fn y-scale
                         :opts  (:opts y-axis-opts)
                         :orient (:orient y-axis-opts :left)
-                        :data [y-min y-max]})])))
+                        :data [y-min y-max]}
+                       {:react-key "y-axis"})])))
