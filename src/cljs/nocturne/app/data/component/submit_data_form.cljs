@@ -126,11 +126,11 @@
                  [:footer {}
                   (om/build button
                             {:content "Submit"}
-                            {:opts {:classes "btn-primary"
-                                    :id "submit-button"}
+                            {:opts {:id "submit-button"}
                              :state {:disabled? (or (:error?  data-name)
                                                     (:error? url)
-                                                    (:error? description))}})
+                                                    (:error? description))
+                                     :classes "btn-primary"}})
                   (when-not (nil? form-message)
                     [:div {}
                      [:ul {:class "list-unstyled"}

@@ -10,6 +10,8 @@
   (:use-macros [cljs.core.async.macros :only [go-loop]]
                [cljs.nocturne.macro :only [defcomponent]]))
 
+"4. TODO: add show and edit chart"
+
 (defcomponent dd
   [{:keys [content]} owner {:keys [parent-ch]}]
   (display-name [_] "dd")
@@ -97,8 +99,8 @@
                    [:div {:style {:margin-left "23.6%"}}
                     (om/build button
                               {:content "Cancel"}
-                              {:opts {:classes "btn-xs btn-warning"
-                                      :id "cancel-button"}})
+                              {:opts {:id "cancel-button"}
+                               :state {:classes "btn-xs btn-warning"}})
                     (om/build button
                               {:content "Submit"}
                               {:opts {:classes "btn-xs btn-primary"

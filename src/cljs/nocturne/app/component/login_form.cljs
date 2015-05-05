@@ -111,10 +111,10 @@
                  [:footer {}
                   (om/build button
                             {:content "Login"}
-                            {:opts {:classes "btn-primary"
-                                    :id "login-button"}
+                            {:opts {:id "login-button"}
                              :state {:disabled? (or (:error? username)
-                                                    (:error? password))}})
+                                                    (:error? password))
+                                     :classes "btn-primary"}})
                   (when-not (nil? form-message)
                     [:div {}
                      [:ul {:class "list-unstyled"}
