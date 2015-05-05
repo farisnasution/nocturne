@@ -13,8 +13,7 @@
     (->> rules
          (map (fn [[rule message]]
                 (when-not (rule value) message)))
-         (filter #(not-nil? %))
-         first)))
+         (filter #(not-nil? %)))))
 
 (defn error-class
   [error? first?]
@@ -24,14 +23,14 @@
    :else ""))
 
 (defn update-error-status
-  [owner message value event]
+  [owner messages value event]
   (om/update-state! owner (fn [current]
                             (let [first? (:first? current)]
                               (assoc current :error? (not-nil? message)
                                              :first? (if (true? first?)
                                                        false
                                                        first?)
-                                             :message message
+                                             :messages messages
                                              :value value
                                              :event event)))))
 
@@ -49,7 +48,7 @@
                :validation-fn (rules-fn val-fns)
                :error? true
                :first? true
-               :message nil
+               :messages nil
                :value nil
                :event nil})
   (will-mount [_]
@@ -58,8 +57,8 @@
                 (go-loop []
                   (let [event (<! ch)
                         value (ue/event->value event)
-                        message (validation-fn value)]
-                    (update-error-status owner message value event))
+                        messages (validation-fn value)]
+                    (update-error-status owner messages value event))
                   (recur))))
   (did-update [_ prev-props prev-state]
               (let [current-error (om/get-state owner :error?)
@@ -68,7 +67,7 @@
                 (put! parent-ch [id
                                  current-error
                                  [current-value current-event]])))
-  (render-state [_ {:keys [ch error? first? message value]}]
+  (render-state [_ {:keys [ch error? first? messages value]}]
                 [:div {:class (str "form-group"
                                    (error-class error? first?))}
                  (when title
@@ -86,5 +85,6 @@
                  (when (= (error-class error? first?) " has-error")
                    [:div {:class "help-block with-errors"}
                     [:ul {:class "list-unstyled"}
-                     [:li {}
-                      message]]])]))
+                     (mapv (fn [message]
+                             [:li {}
+                              message]) messages)]])]))
