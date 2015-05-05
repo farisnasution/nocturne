@@ -4,11 +4,12 @@
   (:use-macros [cljs.nocturne.macro :only [defcomponent]]))
 
 (defcomponent button
-  [{:keys [content]} owner {:keys [classes id]}]
+  [{:keys [content]} owner {:keys [id]}]
   (display-name [_] "button")
   (init-state [_]
-              {:disabled? false})
-  (render-state [_ {:keys [disabled?]}]
+              {:disabled? false
+               :classes "btn-primary"})
+  (render-state [_ {:keys [disabled? classes]}]
                 [:button {:style {:border-radius 0}
                           :class (str "btn "
                                       classes)
