@@ -45,18 +45,18 @@
          end-text-opts))
 
 (defn construct-outer-g
-  [{:keys [inner-size margin]} orient]
+  [{:keys [size margin]} orient]
   (condp = orient
-    :top {:pos-x (:left margin)
-          :pos-y (:top margin)}
-    :bottom {:pos-x (:left margin)
-             :pos-y (- (:height inner-size)
-                       (:bottom margin))}
-    :left {:pos-x (:left margin)
-           :pos-y (:top margin)}
-    :right {:pos-x (- (:width inner-size)
-                      (:right margin))
-            :pos-y (:top margin)}))
+    :top {:x (:left margin)
+          :y (:top margin)}
+    :bottom {:x (:left margin)
+             :y (- (:height size)
+                   (:bottom margin))}
+    :left {:x (:left margin)
+           :y (:top margin)}
+    :right {:x (- (:width size)
+                  (:right margin))
+            :y (:top margin)}))
 
 (defcomponent ordinal-axis
   [{:keys [size scale-fn opts orient data]} owner]
@@ -69,17 +69,22 @@
                      {:scale-fn scale-fn
                       :orient orient
                       :opts (select-keys opts [:line :text])
-                      :data data})
+                      :data data}
+                     {:react-key "ordinal-ticks"})
            (let [text-legend-opts (-> opts
                                       :text-legend
                                       (construct-text-legend orient))]
              (when (-> text-legend-opts :show? true?)
-               (om/build ads/text text-legend-opts)))
+               (om/build ads/text
+                         text-legend-opts
+                         {:react-key "text-legend"})))
            (let [line-axis-opts (-> opts
                                     :line-axis
                                     (construct-line-axis size orient))]
              (when (-> line-axis-opts :show? true?)
-               (om/build ads/line line-axis-opts)))]))
+               (om/build ads/line
+                         line-axis-opts
+                         {:react-key "line-axis"})))]))
 
 (defcomponent numerical-axis
   [{:keys [size scale-fn opts orient data]} owner]
@@ -88,18 +93,23 @@
           [:g {:transform (-> size
                               (construct-outer-g orient)
                               adu/translate)}
-           (om/build-all numerical-ticks
-                         {:scale-fn scale-fn
-                          :orient orient
-                          :opts (select-keys opts [:line :text])
-                          :data data})
+           (om/build numerical-ticks
+                     {:scale-fn scale-fn
+                      :orient orient
+                      :opts (select-keys opts [:line :text :tick])
+                      :data data}
+                     {:react-key "numerical-ticks"})
            (let [text-legend-opts (-> opts
                                       :text-legend
                                       (construct-text-legend orient))]
              (when (-> text-legend-opts :show? true?)
-               (om/build ads/text text-legend-opts)))
+               (om/build ads/text
+                         text-legend-opts
+                         {:react-key "text-legend"})))
            (let [line-axis-opts (-> opts
                                     :line-axis
                                     (construct-line-axis size orient))]
              (when (-> line-axis-opts :show? true?)
-               (om/build ads/line line-axis-opts)))]))
+               (om/build ads/line
+                         line-axis-opts
+                         {:react-key "line-axis"})))]))
