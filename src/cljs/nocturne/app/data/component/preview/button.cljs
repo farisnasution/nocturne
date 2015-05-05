@@ -1,4 +1,4 @@
-(ns cljs.nocturne.app.data.component.preview-button
+(ns cljs.nocturne.app.data.component.preview.button
   (:require [om.core :as om :include-macros true]
             [sablono.core :as html :refer-macros [html]]
             [cljs.nocturne.util.event :as ue]
@@ -15,18 +15,17 @@
       (put! parent-ch result))))
 
 (defcomponent preview-button
-  [data owner {:keys [parent-ch]}]
+  [{:keys [preview-url]} owner {:keys [parent-ch]}]
   (display-name [_] "preview-button")
   (init-state [_]
               (let [ch (chan)]
-                {:preview-url nil
-                 :ch ch
-                 :callback-fn #(put! ch %)}))
+                {:ch ch
+                 :callback-fn #(put! ch %)
+                 :error false}))
   (will-mount [_]
               (let [ch (om/get-state owner :ch)]
                 (go-loop []
-                  (let [event (<! ch)
-                        preview-url (om/get-state owner :preview-url)]
+                  (let [event (<! ch)]
                     (fetch-preview event preview-url parent-ch))
                   (recur))))
   (did-mount [_]
@@ -37,7 +36,9 @@
                 (let [callback-fn (om/get-state owner :callback-fn)
                       node (om/get-node owner)]
                   (ue/unlisten node (:CLICK ue/event-type) callback-fn)))
-  (render [_]
-          (om/build button
-                    {:content "Preview"}
-                    {:opts {:classes "btn-primary"}})))
+  (render-state [_ {:keys [error]}]
+                (om/build button
+                          {:content "Preview"}
+                          {:state {:classes (if error
+                                              "btn-danger"
+                                              "btn-primary")}})))

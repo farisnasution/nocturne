@@ -1,12 +1,14 @@
-(ns cljs.nocturne.app.data.component.preview-table
+(ns cljs.nocturne.app.data.component.preview.table
   (:require [om.core :as om :include-macros true]
-            [sablono.core :as html :refer-macros [html]])
+            [sablono.core :as html :refer-macros [html]]
+            [cljs.nocturne.util.dev :as ud])
   (:use-macros [cljs.nocturne.macro :only [defcomponent]]))
 
 (defn extract-keys
   [coll]
-  (reduce (fn [p n]
-            (into p (keys n))) #{} coll))
+  (when-not (nil? coll)
+    (reduce (fn [p n]
+              (into p (keys n))) #{} coll)))
 
 (defcomponent td
   [{:keys [content]} owner]
@@ -52,21 +54,22 @@
           [:thead {}
            (om/build-all th
                          (map-indexed (fn [idx c]
-                                        {:content c
+                                        {:content (name c)
                                          :react-key idx}) contents)
                          {:key :react-key})]))
 
-(defcomponent display-table
+(defcomponent preview-table
   [data owner]
-  (display-name [_] "display-table")
+  (display-name [_] "preview-table")
   (render [_]
           [:div {:class "table-responsive"}
            (let [ks (extract-keys data)]
-             [:table {:class "table"}
-              (om/build thead
-                        {:contents ks}
-                        {:react-key "display-thead"})
-              (om/build tbody
-                        {:data data
-                         :ks ks}
-                        {:react-key "display-tbody"})])]))
+             (when-not (nil? ks)
+               [:table {:class "table"}
+                (om/build thead
+                          {:contents ks}
+                          {:react-key "display-thead"})
+                (om/build tbody
+                          {:data data
+                           :ks ks}
+                          {:react-key "display-tbody"})]))]))
