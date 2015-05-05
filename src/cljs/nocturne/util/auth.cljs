@@ -20,8 +20,8 @@
       nil?
       not))
 
-(defn fetch-self!
+(defn self-request!
   [& [channel]]
   (let [token-id (-> (us/get-cookies)
                      (uc/get-cookies-value "id"))]
-    (aui/fetch-user-by-token token-id channel)))
+    (aui/request-get-user-by-token token-id channel)))
