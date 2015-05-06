@@ -14,7 +14,7 @@
            text]))
 
 (defcomponent select
-  [{:keys [data opts value-opts]} owner]
+  [{:keys [data opts]} owner]
   (display-name [_] "select")
   (render [_]
           [:select (select-keys opts [:autofocus
@@ -25,9 +25,7 @@
                                       :required
                                       :size])
            (om/build-all select-value
-                         (map-indexed (fn [idx [text value]]
-                                        {:text text
-                                         :opts (assoc value-opts :value value)
-                                         :react-key idx})
+                         (map-indexed (fn [idx d]
+                                        (assoc d :react-key idx))
                                       data)
                          {:key :react-key})]))
