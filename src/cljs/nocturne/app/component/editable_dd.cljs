@@ -10,8 +10,6 @@
   (:use-macros [cljs.core.async.macros :only [go-loop]]
                [cljs.nocturne.macro :only [defcomponent]]))
 
-"4. TODO: add show and edit chart"
-
 (defcomponent dd
   [{:keys [content]} owner {:keys [parent-ch]}]
   (display-name [_] "dd")
