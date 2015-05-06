@@ -1,7 +1,7 @@
 (ns cljs.nocturne.app.chart.io
   (:require [cljs.nocturne.util.io :as ui]))
 
-(defn reques-get-chart
+(defn request-get-chart
   [user-slug {:keys [slug params headers]} & [channel]]
   (let [url (str "/api/v1/user/"
                  user-slug
