@@ -13,6 +13,7 @@
                  [secretary "1.2.3"]
                  [cljs-ajax "0.3.11"]
                  [org.clojars.fterrier/om-autocomplete "0.1.0"]
+                 [hodgepodge "0.1.3"]
                  [enigma "0.1.0"]]
   :profiles {:dev {:plugins [[lein-cljsbuild "1.0.5"]
                              [lein-figwheel "0.2.6"]
