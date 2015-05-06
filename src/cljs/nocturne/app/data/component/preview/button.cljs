@@ -4,14 +4,14 @@
             [cljs.nocturne.util.event :as ue]
             [cljs.core.async :as async :refer [<! put! chan]])
   (:use [cljs.nocturne.app.component.button :only [button]]
-        [cljs.nocturne.util.io :only [get-request]])
+        [cljs.nocturne.util.io :only [external-get-request]])
   (:use-macros [cljs.nocturne.macro :only [defcomponent]]
                [cljs.core.async.macros :only [go-loop go]]))
 
 (defn fetch-preview
   [_ url parent-ch]
   (go
-    (let [result (<! (get-request url {}))]
+    (let [result (<! (external-get-request url {}))]
       (put! parent-ch result))))
 
 (defcomponent preview-button
