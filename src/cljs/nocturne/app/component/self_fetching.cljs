@@ -6,25 +6,41 @@
   (:use-macros [cljs.nocturne.macro :only [defcomponent]]
                [cljs.core.async.macros :only [go-loop]]))
 
+(defn get-user-from-self
+  [data]
+  (let [users (:users data)
+        self (:self data)]
+    (get users self)))
+
 (defn handle-fetching-self
-  [self owner response]
-  (om/set-state! owner :ok? true)
-  (om/update! self (-> response :cookies :id)))
+  [data owner [response-type response]]
+  (when (= response-type :ok)
+    (do
+      (om/set-state! owner :ok? true)
+      (om/transact! data (fn [current]
+                           (-> current
+                               (assoc :self (:slug response))
+                               (update-in [:users]
+                                          (fn [users r]
+                                            (into users r))
+                                          response)))))))
 
 (defcomponent self-fetching
-  [{:keys [self]} owner {:keys [view]}]
+  [data owner {:keys [view]}]
   (display-name [_] "self-fetching")
   (init-state [_]
-              {:ok? (not (empty? self))})
+              {:ok? (-> (:self data)
+                        nil?
+                        not)})
   (will-mount [_]
               (when-not (om/get-state owner :ok?)
                 (let [ch (self-request!)]
                   (go-loop []
                     (let [[response-type response] (<! ch)]
                       (if (= response-type :ok)
-                        (handle-fetching-self self owner response)
+                        (handle-fetching-self data owner response)
                         (self-request! ch)))
                     (recur)))))
   (render-state [_ {:keys [ok?]}]
                 (when ok?
-                  (om/build view {:self self}))))
+                  (om/build view {:user (get-user-from-self data)}))))
