@@ -1,27 +1,24 @@
 (ns cljs.nocturne.util.auth
-  (:require [cljs.nocturne.util.state :as us]
-            [cljs.nocturne.util.cookies :as uc]
-            [cljs.nocturne.app.user.io :as aui]))
+  (:require [cljs.nocturne.app.user.io :as aui]
+            [hodgepodge.core :as hp]))
 
 (defn unauthenticate!
   []
-  (-> (us/get-cookies)
-      (uc/remove-cookies-value! "id")))
+  (hp/remove-item hp/local-storage "id"))
 
 (defn authenticate!
   [token-value]
-  (-> (us/get-cookies)
-      (uc/set-cookies-value! "id" token-value)))
+  (hp/set-item hp/local-storage "id" token-value))
 
 (defn authenticated?
   []
-  (-> (us/get-cookies)
-      (uc/get-cookies-value "id")
+  (-> hp/local-storage
+      (hp/get-item "id")
       nil?
       not))
 
 (defn self-request!
   [& [channel]]
-  (let [token-id (-> (us/get-cookies)
-                     (uc/get-cookies-value "id"))]
+  (let [token-id (-> hp/local-storage
+                     (hp/get-item "id"))]
     (aui/request-get-user-by-token token-id channel)))

@@ -5,10 +5,6 @@
   []
   (:history @state/app-state))
 
-(defn get-cookies
-  []
-  (:cookies @state/app-state))
-
 (defn get-users
   []
   (:users @state/app-state))
