@@ -74,10 +74,10 @@
                       :icon-name icon-name})]))
 
 (defcomponent navbar
-  [{:keys [self]} owner]
+  [{:keys [user]} owner]
   (display-name [_] "navbar")
   (render [_]
-          [:nav {:class "navbar navbar-default"}
+          [:header {:class "navbar navbar-default"}
            [:div {:class "container-fluid"}
             [:div {:class "navbar-header"}
              [:button {:type "button"
@@ -100,32 +100,32 @@
                (om/build search-field {})]]
              [:ul {:class "nav navbar-nav navbar-right"}
               (om/build navbar-option
-                        self
+                        user
                         {:opts {:url-fn user-overview
                                 :icon-name overview-icon}
                          :react-key "overview-navbar-option"})
               (om/build navbar-option
-                        self
+                        user
                         {:opts {:url-fn show-all-data
                                 :icon-name data-icon}
                          :react-key "data-navbar-option"})
               (om/build navbar-option
-                        self
+                        user
                         {:opts {:url-fn show-all-chart
                                 :icon-name chart-icon}
                          :react-key "chart-navbar-option"})
               (om/build navbar-option
-                        self
+                        user
                         {:opts {:url-fn show-all-showcase
                                 :icon-name showcase-icon}
                          :react-key "showcase-navbar-option"})
               (om/build navbar-option
-                        self
+                        user
                         {:opts {:url (user-settings)
                                 :icon-name settings-icon}
                          :react-key "settings-navbar-option"})
               (om/build navbar-option
-                        self
+                        user
                         {:opts {:url (user-logout)
                                 :icon-name logout-icon}
                          :react-key "logout-navbar-option"})]]]]))
