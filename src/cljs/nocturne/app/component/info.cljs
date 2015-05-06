@@ -4,12 +4,16 @@
   (:use [cljs.nocturne.app.user.component.avatar :only [avatar]])
   (:use-macros [cljs.nocturne.macro :only [defcomponent]]))
 
+(defn get-user-from-content
+  [data]
+  (let [users (:users data)
+        [_ _ [user-slug _]] (:content data)]
+    (get users user-slug)))
+
 (defcomponent info
-  [{:keys [image-url user-url username]} owner]
+  [data owner]
   (display-name [_] "info")
   (render [_]
           [:div {:class "row"}
            [:div {:class "col-sm-6"}
-            (om/build avatar {:image-url image-url
-                              :user-url user-url
-                              :username username})]]))
+            (om/build avatar {:user (get-user-from-content data)})]]))
