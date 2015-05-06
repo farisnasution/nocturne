@@ -6,8 +6,8 @@
 
 (defn construct-g
   [scale-fn orient data]
-  (let [value (+ (scale data)
-                 (/ (.rangeBand scale) 2))]
+  (let [value (+ (scale-fn data)
+                 (/ (.rangeBand scale-fn) 2))]
     (cond
      (or (= orient :top)
          (= orient :bottom)) {:x value}
