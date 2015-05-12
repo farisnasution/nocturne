@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-3211"]
+                 [org.clojure/clojurescript "0.0-3269"]
                  [org.omcljs/om "0.8.8"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [figwheel "0.2.6"]
@@ -14,9 +14,16 @@
                  [cljs-ajax "0.3.11"]
                  [org.clojars.fterrier/om-autocomplete "0.1.0"]
                  [hodgepodge "0.1.3"]
-                 [enigma "0.1.0"]
+                 [enigma "0.1.6"]
                  [io.clojure/liberator-transit "0.3.0"]
-                 [org.immutant/immutant "2.0.0"]]
+                 [org.immutant/immutant "2.0.0"]
+                 [com.novemberain/monger "2.1.0"]
+                 [slugger "1.0.1"]
+                 [ring/ring-defaults "0.1.5"]
+                 [ring-transit "0.1.3"]
+                 [compojure "1.3.4"]
+                 [liberator "0.12.2"]
+                 [buddy "0.5.3"]]
   :profiles {:dev {:plugins [[lein-cljsbuild "1.0.5"]
                              [lein-figwheel "0.2.6"]
                              [hiccup-watch "0.1.2"]
@@ -24,7 +31,8 @@
                              [jonase/eastwood "0.2.1"]
                              [lein-ancient "0.6.7"]
                              [lein-kibit "0.1.2"]
-                             [lein-bikeshed "0.2.0"]]}}
+                             [lein-bikeshed "0.2.0"]]
+                   :dependencies [[clj-http "1.1.2"]]}}
   :figwheel {:http-server-root "public"
              :port 3449
              :css-dirs ["resources/public/css"]}
