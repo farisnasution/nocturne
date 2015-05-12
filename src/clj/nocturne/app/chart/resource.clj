@@ -32,7 +32,9 @@
                   [false {}]
                   (let [body (-> request
                                  :body
-                                 (select-keys [:name :url :description]))
+                                 (select-keys [:name :description
+                                               :data-slug :chart-type
+                                               :dimension :measurement]))
                         error (validate adv/chart-validator body)]
                     (if (nil? error)
                       [false {:body body}]
