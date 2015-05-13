@@ -13,7 +13,7 @@
     (->> rules
          (map (fn [[rule message]]
                 (when-not (rule value) message)))
-         (filter #(not-nil? %)))))
+         (filter not-nil?))))
 
 (defn error-class
   [error? first?]
@@ -26,7 +26,7 @@
   [owner messages value event]
   (om/update-state! owner (fn [current]
                             (let [first? (:first? current)]
-                              (assoc current :error? (not (empty? messages))
+                              (assoc current :error? (seq messages)
                                              :first? (if (true? first?)
                                                        false
                                                        first?)

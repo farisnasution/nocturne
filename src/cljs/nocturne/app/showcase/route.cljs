@@ -37,10 +37,7 @@
                (fn [current us ds rslt]
                  (-> current
                      (assoc :content [:showcase :read [us ds]])
-                     (update-in [:users :showcase]
-                                (fn [showcase r]
-                                  (into showcase r))
-                                rslt)))
+                     (update-in [:users :showcase] into rslt)))
                user-slug
                showcase-slug
                result)
@@ -59,10 +56,7 @@
                (fn [current us rslt]
                  (-> current
                      (assoc :content [:showcase :write [us]])
-                     (update-in [:users]
-                                (fn [users r]
-                                  (into users r))
-                                rslt)))
+                     (update-in [:users] into rslt)))
                user-slug
                result)
         (swap! app-state

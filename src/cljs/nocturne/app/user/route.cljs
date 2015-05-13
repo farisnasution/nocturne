@@ -15,10 +15,7 @@
                (fn [current us rslt]
                  (-> current
                      (assoc :content [:overview :read [us]])
-                     (update-in [:users]
-                                (fn [users r]
-                                  (into users r))
-                                rslt)))
+                     (update-in [:users] into rslt)))
                user-slug
                result)
         (swap! app-state

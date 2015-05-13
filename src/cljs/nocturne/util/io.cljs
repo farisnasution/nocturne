@@ -28,9 +28,8 @@
                (chan)
                channel)
           config (config-fn ch params headers)]
-      (do
-        (ajax/GET url config)
-        ch))))
+      (ajax/GET url config)
+      ch)))
 
 (def get-request (base-get-request ajax-config))
 
@@ -42,9 +41,8 @@
              (chan)
              channel)
         config (ajax-config ch params headers)]
-    (do
-      (ajax/POST url config)
-      ch)))
+    (ajax/POST url config)
+    ch))
 
 (defn put-request
   [url {:keys [params headers]} & [channel]]
@@ -52,9 +50,8 @@
              (chan)
              channel)
         config (ajax-config ch params headers)]
-    (do
-      (ajax/PUT url config)
-      ch)))
+    (ajax/PUT url config)
+    ch))
 
 (defn delete-request
   [url {:keys [params headers]} & [channel]]
@@ -62,6 +59,5 @@
              (chan)
              channel)
         config (ajax-config ch params headers)]
-    (do
-      (ajax/DELETE url config)
-      ch)))
+    (ajax/DELETE url config)
+    ch))

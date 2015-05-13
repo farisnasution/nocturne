@@ -15,15 +15,13 @@
 (defn handle-fetching-self
   [data owner [response-type response]]
   (when (= response-type :ok)
-    (do
-      (om/set-state! owner :ok? true)
-      (om/transact! data (fn [current]
-                           (-> current
-                               (assoc :self (:slug response))
-                               (update-in [:users]
-                                          (fn [users r]
-                                            (into users r))
-                                          response)))))))
+    (om/set-state! owner :ok? true)
+    (om/transact! data (fn [current]
+                         (-> current
+                             (assoc :self (:slug response))
+                             (update-in [:users]
+                                        into
+                                        response))))))
 
 (defcomponent self-fetching
   [data owner {:keys [view]}]

@@ -61,7 +61,7 @@
                                      [:chart]
                                      (fn [ds]
                                        (filter (fn [d]
-                                                 (not (= chart-slug (:slug d))))
+                                                 (not= chart-slug (:slug d)))
                                                ds)))]
                (mc/update-by-id (:db request)
                                 "user"
@@ -84,12 +84,13 @@
   :post! (fn [{:keys [request body]}]
            (let [db-instance (:db request)
                  coll-name "user"
-                 new-entity (-> (mc/find-one-as-map db-instance
-                                                    coll-name
-                                                    {:slug user-slug})
-                                (update-in [:chart]
-                                           (fn [ds]
-                                             (conj ds body))))
+                 new-entity (update-in
+                             (mc/find-one-as-map db-instance
+                                                 coll-name
+                                                 {:slug user-slug})
+                             [:chart]
+                             conj
+                             body)
                  _ (mc/update-by-id db-instance
                                     coll-name
                                     (:_id new-entity)

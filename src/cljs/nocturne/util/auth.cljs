@@ -19,6 +19,5 @@
 
 (defn self-request!
   [& [channel]]
-  (let [token-id (-> hp/local-storage
-                     (hp/get-item "id"))]
+  (let [token-id (hp/get-item hp/local-storage "id")]
     (aui/request-get-user-by-token token-id channel)))

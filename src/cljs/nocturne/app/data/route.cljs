@@ -36,10 +36,7 @@
                (fn [current us ds rslt]
                  (-> current
                      (assoc :content [:data :read [us ds]])
-                     (update-in [:users :data]
-                                (fn [data r]
-                                  (into data r))
-                                rslt)))
+                     (update-in [:users :data] into rslt)))
                user-slug
                data-slug
                result)
@@ -58,10 +55,7 @@
                (fn [current us rslt]
                  (-> current
                      (assoc :content [:data :write [us]])
-                     (update-in [:users]
-                                (fn [users r]
-                                  (into users r))
-                                rslt)))
+                     (update-in [:users] into rslt)))
                user-slug
                result)
         (swap! app-state

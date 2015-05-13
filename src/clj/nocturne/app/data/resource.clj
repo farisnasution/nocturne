@@ -59,7 +59,7 @@
                                      [:data]
                                      (fn [ds]
                                        (filter (fn [d]
-                                                 (not (= data-slug (:slug d))))
+                                                 (not= data-slug (:slug d)))
                                                ds)))]
                (mc/update-by-id (:db request)
                                 "user"
@@ -82,12 +82,13 @@
   :post! (fn [{:keys [request body]}]
            (let [db-instance (:db request)
                  coll-name "user"
-                 new-entity (-> (mc/find-one-as-map db-instance
-                                                    coll-name
-                                                    {:slug user-slug})
-                                (update-in [:data]
-                                           (fn [ds]
-                                             (conj ds body))))
+                 new-entity (update-in
+                             (mc/find-one-as-map db-instance
+                                                 coll-name
+                                                 {:slug user-slug})
+                             [:data]
+                             conj
+                             body)
                  _ (mc/update-by-id db-instance
                                     coll-name
                                     (:_id new-entity)

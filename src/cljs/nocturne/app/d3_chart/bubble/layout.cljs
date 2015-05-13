@@ -3,7 +3,7 @@
 
 (defn -invoke-sort
   [scale value]
-  (.sort scale (if (false? value) nil value)))
+  (.sort scale (when-not (false? value) value)))
 
 (defn -invoke-size
   [scale value]
