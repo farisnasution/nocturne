@@ -36,7 +36,7 @@
 
 (defroutes -file-routes
   (route/resources "/")
-  (rfn [] (main-resource "index.html")))
+  (rfn [] (main-resource "index_prod.html")))
 
 (def file-routes (-> -file-routes
                      (wrap-defaults site-defaults)))

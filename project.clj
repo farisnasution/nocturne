@@ -47,7 +47,13 @@
                         :compiler {:output-to "resources/public/js/nocturne.js"
                                    :output-dir "resources/public/js/out"
                                    :optimizations :none
-                                   :source-map true}}]}
+                                   :source-map true
+                                   :pretty-print true}}
+                       {:id "prod"
+                        :source-paths ["src/cljs"]
+                        :compiler {:output-to "resources/public/js/nocturne_prod.js"
+                                   :optimizations :advanced
+                                   :pretty-print false}}]}
   :hiccup-watch {:input-dir "src/hiccup/nocturne"
                  :output-dir "resources/public"}
   :sass {:src "src/sass/nocturne"
