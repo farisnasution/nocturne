@@ -1,6 +1,6 @@
 (ns clj.nocturne.app.chart.resource
-  (:require [clj.nocturne.app.chart.validator :as adv]
-            [clj.nocturne.app.chart.mapper :as adm]
+  (:require [clj.nocturne.app.chart.validator :as acv]
+            [clj.nocturne.app.chart.mapper :as acm]
             [clj.nocturne.app.base.util :as abu]
             [clj.nocturne.app.base.resource :as abr]
             [monger.collection :as mc]
@@ -35,7 +35,7 @@
                                  (select-keys [:name :description
                                                :data-slug :chart-type
                                                :dimension :measurement]))
-                        error (validate adv/chart-validator body)]
+                        error (validate acv/chart-validator body)]
                     (if (nil? error)
                       [false {:body body}]
                       [true {:error error}]))))
